@@ -67,6 +67,19 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
+  def devote
+    @topic = Topic.find(params[:id])
+    if @topic.votes.count > 0
+      @topic.votes.first.destroy
+      redirect_to topics_path
+    else
+      respond_to do |format|
+        format.html { redirect_to topics_path, notice: 'No vote left for devoting.' }
+        format.json { head :no_content }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_topic
@@ -77,4 +90,5 @@ class TopicsController < ApplicationController
     def topic_params
       params.require(:topic).permit(:title, :description)
     end
+
 end

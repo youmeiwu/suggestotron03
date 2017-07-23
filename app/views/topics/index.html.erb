@@ -6,16 +6,25 @@
   <thead>
     <tr>
       <th>Title</th>
+      <th>Topic Id</th>
+      <th>Votes</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @topics.each do |topic| %>
+    <% @topics.sort_by {|topic| -topic.vote}.each do |topic| %>
       <tr>
         <td><%= link_to(topic.title, topic_path(topic)) %></td>
-        <td><%= pluralize(topic.votes.count, "vote") %></td>
+        <td><%= topic.id %></td>
+        <td><%= topic.vote %><td>
+          <% if topic.vote >0 %>
+            <%= "votes"%>
+          <% else %>
+            <%= "vote" %>
+          <% end %>
         <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+        <td><%= button_to '-1', devote_topic_path(topic), method: :delete %></td>
         <td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
